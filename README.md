@@ -69,6 +69,43 @@ decoder expects. The awkward corners are the compiler's, not this tool's:
 }
 ```
 
+## Or: from a Nix declaration
+
+`lib.mkIpkg` takes the ergonomic declaration, applies the rewrite rules, and
+produces the rendered file:
+
+```nix
+let
+  ipkgFor = inputs.idris2-ipkg.lib.mkIpkg {
+    inherit pkgs;
+    renderer = inputs.idris2-ipkg.packages.${system}.ipkg-render;
+  };
+
+  myIpkg = ipkgFor {
+    package   = "my-package";
+    version   = "0.1.0";
+    sourcedir = "src";
+    depends   = [ "eff" ];
+    opts      = "--total";
+    modules   = [ "My.Module" ];
+  };
+in {
+  packages.${system}.my-package = pkgs.runCommand "my-package.ipkg" { } ''
+    cp ${myIpkg} $out
+  '';
+}
+```
+
+`lib.mkSrc { inherit pkgs renderer; } { inherit src ipkg; }` renders the file and
+injects it into a copy of `src`, removing any stale `.ipkg` — the shape you want
+for a build source.
+
+`lib.rules` and `lib.toPkgJson` are exposed so a consumer can inspect or override
+the mapping.
+
+The helpers are system-independent: you pass your own `pkgs` and the renderer for
+your system, so this flake never imposes a nixpkgs on you.
+
 ## Mapping an ergonomic config onto it
 
 Nothing forces you to author the shapes above by hand. Declare what you mean and
@@ -121,6 +158,18 @@ nix develop
 Dependencies (`idris2`'s package and `json`) come from
 [nix-idris2-packages](https://github.com/mattpolzin/nix-idris2-packages), so each
 is its own derivation and builds without network access.
+
+## Layout
+
+```
+flake.nix                 flake-parts + import-tree (+ flake-file declared)
+nix/packages.nix          ipkg-render via buildIdris (idris2Api + packdb.json)
+nix/lib.nix               exports lib.{mkIpkg,mkSrc,toPkgJson,rules}
+nix/checks.nix            build, golden, lib-renders, rejects-bad-input
+lib/mk-ipkg.nix           the rewrite rules and the derivations
+src/Main.idr              the tool: 2 instances + 4 derives + pretty
+tests/                    fixture, expected output, bad input
+```
 
 ## Licence
 

@@ -4,6 +4,27 @@
     { pkgs, system, config, ... }:
     let
       ps = inputs.packageset.packages.${system};
+      ipkgLib = import ../lib/mk-ipkg.nix { inherit (pkgs) lib; };
+
+      renderer = config.packages.ipkg-render;
+
+      # What a consumer actually writes: the ergonomic declaration, no PkgDesc
+      # shapes anywhere. Must render to the same bytes as the JSON fixture.
+      ergonomic = {
+        package = "cryptosystem";
+        version = "0.1.0";
+        authors = "Adriano";
+        license = "MIT";
+        brief = "b";
+        readme = "README.md";
+        sourcedir = "src";
+        opts = "--total";
+        depends = [ "eff" ];
+        modules = [
+          "Crypto"
+          "Crypto.Internal"
+        ];
+      };
     in
     {
       checks = {
@@ -14,7 +35,7 @@
         # and will fail if the compiler changes it.
         golden = pkgs.runCommand "ipkg-render-golden" {
           nativeBuildInputs = [
-            config.packages.ipkg-render
+            renderer
             pkgs.diffutils
           ];
         } ''
@@ -23,10 +44,19 @@
           touch $out
         '';
 
+        # The Nix-side layer: declaration -> rewrite rules -> JSON -> .ipkg.
+        lib-renders = pkgs.runCommand "ipkg-render-lib" {
+          nativeBuildInputs = [ pkgs.diffutils ];
+        } ''
+          diff -u ${../tests/expected.ipkg} \
+            ${ipkgLib.mkIpkg { inherit pkgs renderer; } ergonomic}
+          touch $out
+        '';
+
         # A malformed input must fail, and must say which field is wrong.
         rejects-bad-input = pkgs.runCommand "ipkg-render-rejects-bad-input" {
           nativeBuildInputs = [
-            config.packages.ipkg-render
+            renderer
             pkgs.gnugrep
           ];
         } ''
