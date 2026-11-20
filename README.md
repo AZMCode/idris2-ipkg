@@ -1,5 +1,12 @@
 # idris2-ipkg
 
+<picture>
+  <source media="(prefers-color-scheme: dark)"
+          srcset="https://0rwx.com/static/AI-W-dark.svg">
+  <img alt="0rwx: W — AI has read-write access; AI collaboration"
+       src="https://0rwx.com/static/AI-W-light.svg">
+</picture>
+
 Render Idris2 `.ipkg` files from JSON.
 
 The point is not the JSON. The point is that **the field set, the ordering, the
@@ -170,6 +177,18 @@ lib/mk-ipkg.nix           the rewrite rules and the derivations
 src/Main.idr              the tool: 2 instances + 4 derives + pretty
 tests/                    fixture, expected output, bad input
 ```
+
+## AI usage
+
+This repository is rated [`w`](https://0rwx.com) on the 0rwx scale — *AI has
+read-write permissions*, which that framework calls **AI collaboration**:
+
+> W — WRITE — AI has read-write permissions — AI collaboration — I read the code
+
+In practice the code here was written by an AI agent working from a human-set
+design: the split between `pretty` and the decoder, the two hand-written
+instances, the rule list, and the packaging were decided in dialogue, and the
+agent implemented and verified them. The human reviews and maintains.
 
 ## Licence
 
