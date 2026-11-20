@@ -1,11 +1,13 @@
 # idris2-ipkg
 
-<picture>
-  <source media="(prefers-color-scheme: dark)"
-          srcset="https://0rwx.com/static/AI-W-dark.svg">
-  <img alt="0rwx: W — AI has read-write access; AI collaboration"
-       src="https://0rwx.com/static/AI-W-light.svg">
-</picture>
+## AI Usage Badge
+
+|![0rwx: W — AI has read-write access; AI collaboration](https://raw.githubusercontent.com/NamtaoProductions/0rwx.com/refs/heads/main/static/50x50/AI-W-50x50.png) | [0rwx: W — AI has read-write access; AI collaboration](https://0rwx.com/) |
+|---|---|
+
+More information at the bottom
+
+## Description
 
 Render Idris2 `.ipkg` files from JSON.
 
