@@ -1,0 +1,11 @@
+package ipkg-render
+
+version    = 0.1.0
+license    = "MIT"
+sourcedir  = "src"
+
+depends    = idris2, json
+opts       = "--total"
+
+executable = ipkg-render
+main       = Main

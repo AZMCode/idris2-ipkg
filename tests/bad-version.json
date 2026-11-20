@@ -1,0 +1,8 @@
+{"name":"cryptosystem","version":"0.1.0","langversion":null,"authors":"Adriano",
+"maintainers":null,"license":"MIT","brief":"b","readme":"README.md",
+"homepage":null,"sourceloc":null,"bugtracker":null,
+"depends":[{"pkgname":"eff","pkgbounds":{"lowerBound":null,"lowerInclusive":true,"upperBound":null,"upperInclusive":true}}],
+"modules":[["Crypto","Crypto"],["Crypto.Internal","Crypto.Internal"]],
+"mainmod":null,"executable":null,"options":[null,"--total"],"sourcedir":"src",
+"datadir":null,"builddir":null,"outputdir":null,
+"prebuild":null,"postbuild":null,"preinstall":null,"postinstall":null,"preclean":null,"postclean":null}

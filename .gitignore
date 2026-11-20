@@ -1,0 +1,7 @@
+/build/
+/depends/
+*.ttc
+*.ttm
+*.ibc
+/.direnv/
+/result*
