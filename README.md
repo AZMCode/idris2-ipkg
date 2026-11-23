@@ -24,8 +24,10 @@ $ ipkg-render < metadata.json > package.ipkg
 
 ## Motivation
 
-This project was borne out of frustration from using Idris2, Pack, and
-Nix together.
+This project was borne out of frustration from using
+[Idris2](https://github.com/idris-lang/Idris2),
+[Pack](https://github.com/stefan-hoeck/idris2-pack), and
+[Nix](https://nixos.org/) together.
 
 The Idris2 ecosystem is overwhelmingly packaged, at least nowadays,
 using Pack.
@@ -47,10 +49,10 @@ options:
 - Lock the entire dependency closure, using an FOD, and running Pack
   inside
   - This has the benefit of working, but per-package caching is a no-go
-- Use `idr2nix`
+- Use [`idr2nix`](https://sr.ht/~thatonelutenist/idr2nix/)
   - While this (may?) work, this project has been unmaintained for
     quite a while
-- Use `nix-idris2-packages`
+- Use [`nix-idris2-packages`](https://github.com/mattpolzin/nix-idris2-packages)
   - While this is amazing, and ultimately what I go with, it completely
     trashes any compatibility with the pack ecosystem, since the
     dependencies are now specified in the Nix expression, not in the
@@ -58,8 +60,8 @@ options:
 
 What is the solution for this?
 
-Well, given the context of Nix projects like flake-file, it's quite
-simple:
+Well, given the context of Nix projects like
+[flake-file](https://github.com/denful/flake-file), it's quite simple:
 
 Generate the .ipkg file from Nix code!
 
@@ -70,9 +72,10 @@ Having just complained about unmaintainability, you might be puzzled:
 How could this make any sense from a *maintainability* perspective?
 
 While we don't have a serializer and deserializer, we do have a
-wonderful package for `json` support, and the compiler's parser, which
-is written in a language with wondrous reflection support, and
-excellently detailed typing.
+wonderful package for
+[`json`](https://github.com/stefan-hoeck/idris2-json) support, and the
+compiler's parser, which is written in a language with wondrous
+reflection support, and excellently detailed typing.
 
 So bad those two things could not be combined in any way whatsoever.
 
@@ -173,7 +176,8 @@ the file and injects it into a copy of `src`, removing any stale
 or override the mapping.
 
 The helpers are system-independent: you pass your own `pkgs` and the
-renderer for your system, so this flake never imposes a nixpkgs on you.
+renderer for your system, so this flake never imposes a
+[nixpkgs](https://github.com/NixOS/nixpkgs) on you.
 
 ## Mapping an ergonomic config onto it
 
@@ -216,8 +220,9 @@ but encountered String
   whatever the nixpkgs attribute is called.
 - **`json` is not the compiler's JSON.** The compiler's own `ToJson`
   is a private, one-off serializer with no string escaping and no
-  decoder; this uses the `json` package from the pack-db, which has a
-  derived decoder.
+  decoder; this uses the `json` package from the pack-db, whose
+  `Derive.FromJSON` is built on
+  [`elab-util`](https://github.com/stefan-hoeck/idris2-elab-util).
 
 ## Building
 
@@ -231,6 +236,12 @@ Dependencies (`idris2`'s package and `json`) come from
 [nix-idris2-packages](https://github.com/mattpolzin/nix-idris2-packages),
 so each is its own derivation and builds without network access when
 cached.
+
+The flake itself is assembled with
+[flake-parts](https://github.com/hercules-ci/flake-parts) and
+[import-tree](https://github.com/denful/import-tree);
+[flake-file](https://github.com/denful/flake-file) is declared so
+`flake.nix` can eventually be regenerated from the modules.
 
 ## Layout
 
@@ -257,6 +268,9 @@ human-set design: the split between `pretty` and the decoder, the two
 hand-written instances, the rule list, and the packaging were decided
 in dialogue, and the agent implemented and verified them. The human
 reviews and maintains.
+
+The badge art is CC0, by
+[NamtaoProductions](https://github.com/NamtaoProductions/0rwx.com).
 
 ## Licence
 
